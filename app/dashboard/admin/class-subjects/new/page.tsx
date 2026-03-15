@@ -21,7 +21,7 @@ export default function NewClassSubjectPage() {
       if (c) setClasses(c);
       const { data: s } = await supabase.from('subjects').select('*');
       if (s) setSubjects(s);
-      const { data: t } = await supabase.from('profiles').select('*').eq('role', 'teacher');
+      const { data: t } = await supabase.from('profiles').select('*').in('role', ['nastavnik', 'razrednik', 'zamjenik_razrednika', 'admin']);
       if (t) setTeachers(t);
     };
     fetch();
