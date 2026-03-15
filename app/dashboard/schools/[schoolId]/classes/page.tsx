@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
 interface ClassDepartment {
   id: string;
@@ -14,6 +15,7 @@ export default function ClassSelectionPage() {
   const { schoolId } = useParams();
   const [classes, setClasses] = useState<ClassDepartment[]>([]);
   const [loading, setLoading] = useState(true);
+  const supabase = createClient();
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -44,7 +46,7 @@ export default function ClassSelectionPage() {
     };
 
     fetchClasses();
-  }, [schoolId]);
+  }, [schoolId, supabase]);
 
   if (loading) return <div>Učitavanje...</div>;
 
@@ -53,16 +55,17 @@ export default function ClassSelectionPage() {
       <h1 className="mb-6 text-2xl font-bold">Odaberite razred</h1>
       <div className="grid gap-4">
         {classes.map((cls) => (
-          <div
+          <Link
             key={cls.id}
-            className={`rounded-lg border p-4 ${
+            href={`/dashboard/classes/${cls.id}`}
+            className={`rounded-lg border p-4 block hover:shadow-md transition ${
               cls.role === 'razrednik' ? 'bg-green-100' : 
               cls.role === 'zamjenik_razrednika' ? 'bg-orange-100' : 'bg-white'
             }`}
           >
             <h2 className="text-lg font-semibold">{cls.name}</h2>
             <p className="text-sm text-gray-600">Uloga: {cls.role}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

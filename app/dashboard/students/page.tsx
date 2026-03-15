@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 export default async function StudentsPage() {
   const supabase = await createClient();
@@ -32,6 +33,7 @@ export default async function StudentsPage() {
             <th className="py-2 px-4 border-b">Prezime</th>
             <th className="py-2 px-4 border-b">Ime</th>
             <th className="py-2 px-4 border-b">Razred</th>
+            <th className="py-2 px-4 border-b">Akcije</th>
           </tr>
         </thead>
         <tbody>
@@ -39,7 +41,16 @@ export default async function StudentsPage() {
             <tr key={student.id} className="hover:bg-gray-50">
               <td className="py-2 px-4 border-b">{student.last_name}</td>
               <td className="py-2 px-4 border-b">{student.first_name}</td>
-              <td className="py-2 px-4 border-b">{student.class_departments?.name}</td>
+              <td className="py-2 px-4 border-b">
+                <Link href={`/dashboard/classes/${student.class_id}`} className="text-blue-600 hover:underline">
+                  {student.class_departments?.name}
+                </Link>
+              </td>
+              <td className="py-2 px-4 border-b">
+                <Link href={`/dashboard/students/${student.id}`} className="text-blue-600 hover:underline">
+                  Pregled
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
