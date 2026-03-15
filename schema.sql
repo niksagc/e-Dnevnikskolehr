@@ -49,5 +49,7 @@ create table if not exists teacher_subjects (
 create table if not exists class_subjects (
   id uuid default gen_random_uuid() primary key,
   class_id uuid references classes(id),
-  subject_id uuid references subjects(id)
+  subject_id uuid references subjects(id),
+  teacher_id uuid references profiles(id),
+  substitute_teacher_id uuid references profiles(id)
 );
