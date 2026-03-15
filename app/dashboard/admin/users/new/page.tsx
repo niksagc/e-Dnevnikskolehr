@@ -15,34 +15,18 @@ export default function NewUserPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // 1. Create auth user
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName, role }
-      }
+    const response = await fetch('/api/admin/create-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fullName, email, password, role })
     });
 
-    if (authError) {
-      alert('Greška pri stvaranju korisnika: ' + authError.message);
-      return;
-    }
+    const data = await response.json();
 
-    // 2. Create profile record
-    if (authData.user) {
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: authData.user.id,
-        full_name: fullName,
-        email,
-        role
-      });
-
-      if (profileError) {
-        alert('Greška pri stvaranju profila: ' + profileError.message);
-      } else {
-        router.push('/dashboard/admin/users');
-      }
+    if (data.error) {
+      alert('Greška: ' + data.error);
+    } else {
+      router.push('/dashboard/admin/users');
     }
   };
 
