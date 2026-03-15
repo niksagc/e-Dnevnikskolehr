@@ -8,7 +8,7 @@ export default function NewUserPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student');
+  const [role, setRole] = useState('nastavnik');
   const router = useRouter();
   const supabase = createClient();
 
@@ -39,9 +39,11 @@ export default function NewUserPage() {
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Lozinka" className="border p-2 w-full" required />
         <select value={role} onChange={(e) => setRole(e.target.value)} className="border p-2 w-full" required>
           <option value="admin">Admin</option>
-          <option value="teacher">Nastavnik</option>
-          <option value="student">Učenik</option>
-          <option value="parent">Roditelj</option>
+          <option value="nastavnik">Nastavnik</option>
+          <option value="razrednik">Razrednik</option>
+          <option value="zamjenik_razrednika">Zamjenik razrednika</option>
+          <option value="učenik">Učenik</option>
+          <option value="roditelj">Roditelj</option>
         </select>
         <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Stvori korisnika</button>
       </form>
