@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default async function StudentsAdminPage() {
   const supabase = await createClient();
-  const { data: students, error } = await supabase.from('students').select('*, classes(name)');
+  const { data: students, error } = await supabase.from('students').select('*');
 
   return (
     <div className="p-6">
@@ -34,7 +34,7 @@ export default async function StudentsAdminPage() {
             {students?.map((student) => (
               <tr key={student.id}>
                 <td className="border p-2">{student.full_name}</td>
-                <td className="border p-2">{student.classes?.name}</td>
+                <td className="border p-2">{student.class_id}</td>
                 <td className="border p-2">
                   <Link href={`/dashboard/admin/students/${student.id}/edit`} className="text-blue-600 hover:underline">
                     Uredi
