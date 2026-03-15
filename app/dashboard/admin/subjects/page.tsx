@@ -1,32 +1,48 @@
 import { createClient } from '@/utils/supabase/server';
+import Link from 'next/link';
 
 export default async function SubjectsAdminPage() {
   const supabase = await createClient();
   const { data: subjects, error } = await supabase.from('subjects').select('*');
 
-  if (error) return <div>Greška pri učitavanju predmeta: {error.message}</div>;
-
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Administracija predmeta</h1>
-      <table className="min-w-full bg-white border">
-        <thead>
-          <tr>
-            <th className="border p-2">Naziv</th>
-            <th className="border p-2">Akcije</th>
-          </tr>
-        </thead>
-        <tbody>
-          {subjects.map((subject) => (
-            <tr key={subject.id}>
-              <td className="border p-2">{subject.name}</td>
-              <td className="border p-2">
-                <button className="text-blue-600">Uredi</button>
-              </td>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Administracija predmeta</h1>
+        <Link 
+          href="/dashboard/admin/subjects/new" 
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          + Dodaj novi predmet
+        </Link>
+      </div>
+
+      {error ? (
+        <div className="bg-red-100 p-4 rounded text-red-700">
+          Greška: {error.message}
+        </div>
+      ) : (
+        <table className="min-w-full bg-white border">
+          <thead>
+            <tr>
+              <th className="border p-2">Naziv</th>
+              <th className="border p-2">Akcije</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {subjects?.map((s) => (
+              <tr key={s.id}>
+                <td className="border p-2">{s.name}</td>
+                <td className="border p-2">
+                  <Link href={`/dashboard/admin/subjects/${s.id}/edit`} className="text-blue-600 hover:underline">
+                    Uredi
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

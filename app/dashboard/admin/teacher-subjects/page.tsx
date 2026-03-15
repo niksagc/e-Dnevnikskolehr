@@ -1,16 +1,39 @@
-import { createClient } from '@/utils/supabase/server';
+'use client';
 
-export default async function TeacherSubjectsAdminPage() {
-  const supabase = await createClient();
-  const { data: teacherSubjects, error } = await supabase
-    .from('teacher_subjects')
-    .select('*, profiles(full_name), subjects(name)');
+import { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import Link from 'next/link';
 
-  if (error) return <div>Greška pri učitavanju: {error.message}</div>;
+export default function TeacherSubjectsAdminPage() {
+  const [data, setData] = useState<any[]>([]);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: ts, error } = await supabase
+        .from('teacher_subjects')
+        .select('*, profiles(full_name), subjects(name)');
+      if (ts) setData(ts);
+    };
+    fetchData();
+  }, [supabase]);
+
+  const remove = async (id: string) => {
+    await supabase.from('teacher_subjects').delete().eq('id', id);
+    setData(data.filter(item => item.id !== id));
+  };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Dodijeli nastavnicima predmete</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Dodijeli nastavnicima predmete</h1>
+        <Link 
+          href="/dashboard/admin/teacher-subjects/new" 
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          + Dodaj dodjelu
+        </Link>
+      </div>
       <table className="min-w-full bg-white border">
         <thead>
           <tr>
@@ -20,12 +43,12 @@ export default async function TeacherSubjectsAdminPage() {
           </tr>
         </thead>
         <tbody>
-          {teacherSubjects.map((ts) => (
+          {data.map((ts) => (
             <tr key={ts.id}>
               <td className="border p-2">{ts.profiles?.full_name}</td>
               <td className="border p-2">{ts.subjects?.name}</td>
               <td className="border p-2">
-                <button className="text-red-600">Ukloni</button>
+                <button onClick={() => remove(ts.id)} className="text-red-600 hover:underline">Ukloni</button>
               </td>
             </tr>
           ))}
