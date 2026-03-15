@@ -1,13 +1,13 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 
-export default async function StudentProfilePage({ params }: { params: { id: string } }) {
+export default async function StudentProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  const { id } = params;
+  const { id } = await params;
 
   // Dohvaćanje podataka o učeniku
   const { data: student, error: studentError } = await supabase

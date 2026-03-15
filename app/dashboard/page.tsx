@@ -17,29 +17,23 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchSchools = async () => {
-      console.log('Dashboard: Fetching user...');
       const { data: { user } } = await supabase.auth.getUser();
-      console.log('Dashboard: User:', user);
       if (!user) {
-        console.log('Dashboard: No user, redirecting to /login');
         router.push('/login');
         return;
       }
 
-      console.log('Dashboard: Fetching schools for user:', user.id);
       const { data, error } = await supabase
         .from('teacher_schools')
         .select('schools(id, name)')
         .eq('teacher_id', user.id);
 
       if (error) {
-        console.error('Dashboard: Error fetching schools:', error);
+        console.error('Error fetching schools:', error);
       } else if (data) {
-        console.log('Dashboard: Schools data:', data);
         const schoolList = data.map((item: any) => item.schools);
         setSchools(schoolList);
         if (schoolList.length === 1) {
-          console.log('Dashboard: Redirecting to single school classes');
           router.push(`/dashboard/schools/${schoolList[0].id}/classes`);
         }
       }

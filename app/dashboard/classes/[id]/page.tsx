@@ -1,13 +1,13 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 
-export default async function ClassDashboardPage({ params }: { params: { id: string } }) {
+export default async function ClassDashboardPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  const { id } = params;
+  const { id } = await params;
 
   // Dohvaćanje podataka o razredu
   const { data: classData, error: classError } = await supabase
