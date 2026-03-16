@@ -21,7 +21,7 @@ export default function NewClassSubjectPage() {
       if (c) setClasses(c);
       const { data: s } = await supabase.from('subjects').select('*');
       if (s) setSubjects(s);
-      const { data: t } = await supabase.from('profiles').select('*').in('role', ['nastavnik', 'razrednik', 'zamjenik_razrednika', 'admin']);
+      const { data: t } = await supabase.from('profiles').select('*').eq('role', 'nastavnik');
       if (t) setTeachers(t);
     };
     fetch();
@@ -30,9 +30,9 @@ export default function NewClassSubjectPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { error } = await supabase.from('class_subjects').insert({ 
-      class_id: classId, 
-      subject_id: subjectId,
-      teacher_id: teacherId,
+      class_id: classId || null, 
+      subject_id: subjectId || null,
+      teacher_id: teacherId || null,
       substitute_teacher_id: substituteId || null
     });
     if (error) {
