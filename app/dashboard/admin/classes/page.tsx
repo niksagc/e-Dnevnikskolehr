@@ -3,7 +3,11 @@ import Link from 'next/link';
 
 export default async function ClassesAdminPage() {
   const supabase = await createClient();
-  const { data: classes, error } = await supabase.from('classes').select('*, schools(name)');
+  const { data: classes, error } = await supabase.from('classes').select(`
+    *, 
+    razrednik:profiles!classes_razrednik_id_fkey(full_name),
+    zamjenik:profiles!classes_zamjenik_razrednika_id_fkey(full_name)
+  `);
 
   return (
     <div className="p-6">
@@ -25,8 +29,9 @@ export default async function ClassesAdminPage() {
         <table className="min-w-full bg-white border">
           <thead>
             <tr>
-              <th className="border p-2">Naziv</th>
-              <th className="border p-2">Škola</th>
+              <th className="border p-2">Ime razreda</th>
+              <th className="border p-2">Razrednik, Zamjenik razrednika</th>
+              <th className="border p-2">Godina</th>
               <th className="border p-2">Akcije</th>
             </tr>
           </thead>
@@ -34,7 +39,10 @@ export default async function ClassesAdminPage() {
             {classes?.map((c) => (
               <tr key={c.id}>
                 <td className="border p-2">{c.name}</td>
-                <td className="border p-2">{c.schools?.name}</td>
+                <td className="border p-2">
+                  {c.razrednik?.full_name || 'Nije dodijeljen'}, {c.zamjenik?.full_name || 'Nije dodijeljen'}
+                </td>
+                <td className="border p-2">{c.godina}. razred srednje škole</td>
                 <td className="border p-2">
                   <Link href={`/dashboard/admin/classes/${c.id}/edit`} className="text-blue-600 hover:underline">
                     Uredi

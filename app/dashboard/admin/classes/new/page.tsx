@@ -32,7 +32,7 @@ export default function NewClassPage() {
       name, 
       school_id: schoolId,
       razrednik_id: razrednikId,
-      zamjenik_razrednika_id: zamjenikId,
+      zamjenik_razrednika_id: zamjenikId || null,
       godina: godina
     });
     if (error) {
@@ -55,8 +55,8 @@ export default function NewClassPage() {
           <option value="">Odaberi razrednika</option>
           {teachers.map((t) => <option key={t.id} value={t.id}>{t.full_name}</option>)}
         </select>
-        <select value={zamjenikId} onChange={(e) => setZamjenikId(e.target.value)} className="border p-2 w-full" required>
-          <option value="">Odaberi zamjenika razrednika</option>
+        <select value={zamjenikId} onChange={(e) => setZamjenikId(e.target.value)} className="border p-2 w-full">
+          <option value="">Odaberi zamjenika razrednika (opcionalno)</option>
           {teachers.map((t) => <option key={t.id} value={t.id}>{t.full_name}</option>)}
         </select>
         <select value={godina} onChange={(e) => setGodina(e.target.value)} className="border p-2 w-full" required>

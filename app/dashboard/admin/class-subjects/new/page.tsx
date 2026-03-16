@@ -29,20 +29,19 @@ export default function NewClassSubjectPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Inserting:', { 
+    const payload = { 
       class_id: classId || null, 
       subject_id: subjectId || null,
       teacher_id: teacherId || null,
       substitute_teacher_id: substituteId || null
-    });
-    const { error } = await supabase.from('class_subjects').insert({ 
-      class_id: classId || null, 
-      subject_id: subjectId || null,
-      teacher_id: teacherId || null,
-      substitute_teacher_id: substituteId || null
-    });
+    };
+    console.log('Slanje podataka u bazu:', payload);
+    
+    const { error } = await supabase.from('class_subjects').insert(payload);
+    
     if (error) {
-      alert('Greška: ' + error.message);
+      console.error('Supabase greška:', error);
+      alert('Greška pri spremanju: ' + error.message + '\nDetalji: ' + JSON.stringify(error.details));
     } else {
       router.push('/dashboard/admin/class-subjects');
     }
