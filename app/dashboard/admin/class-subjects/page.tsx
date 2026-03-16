@@ -12,7 +12,7 @@ export default function ClassSubjectsAdminPage() {
     const fetchData = async () => {
       const { data: cs, error } = await supabase
         .from('class_subjects')
-        .select('*, classes(name), subjects(name), teachers:profiles!teacher_id(full_name), substitutes:profiles!substitute_teacher_id(full_name)');
+        .select('*, class_departments(name), subjects(name), teachers:profiles!teacher_id(full_name), substitutes:profiles!substitute_teacher_id(full_name)');
       if (cs) setData(cs);
     };
     fetchData();
@@ -47,7 +47,7 @@ export default function ClassSubjectsAdminPage() {
         <tbody>
           {data.map((cs) => (
             <tr key={cs.id}>
-              <td className="border p-2">{cs.classes?.name}</td>
+              <td className="border p-2">{cs.class_departments?.name}</td>
               <td className="border p-2">{cs.subjects?.name}</td>
               <td className="border p-2">{cs.teachers?.full_name}</td>
               <td className="border p-2">{cs.substitutes?.full_name || '-'}</td>
