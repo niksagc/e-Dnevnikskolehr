@@ -29,6 +29,12 @@ export default function NewClassSubjectPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Inserting:', { 
+      class_id: classId || null, 
+      subject_id: subjectId || null,
+      teacher_id: teacherId || null,
+      substitute_teacher_id: substituteId || null
+    });
     const { error } = await supabase.from('class_subjects').insert({ 
       class_id: classId || null, 
       subject_id: subjectId || null,

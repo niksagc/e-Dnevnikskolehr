@@ -19,7 +19,7 @@ export default function NewClassPage() {
     const fetchData = async () => {
       const { data: s } = await supabase.from('schools').select('*');
       if (s) setSchools(s);
-      const { data: t } = await supabase.from('profiles').select('*').eq('role', 'teacher');
+      const { data: t } = await supabase.from('profiles').select('*').in('role', ['nastavnik', 'teacher']);
       if (t) setTeachers(t);
     };
     fetchData();

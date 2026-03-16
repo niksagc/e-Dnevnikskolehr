@@ -69,8 +69,6 @@ export default function EditUserPage() {
         >
           <option value="admin">Admin</option>
           <option value="nastavnik">Nastavnik</option>
-          <option value="razrednik">Razrednik</option>
-          <option value="zamjenik_razrednika">Zamjenik razrednika</option>
           <option value="učenik">Učenik</option>
           <option value="roditelj">Roditelj</option>
         </select>

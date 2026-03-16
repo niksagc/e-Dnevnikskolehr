@@ -40,8 +40,6 @@ export default function NewUserPage() {
         <select value={role} onChange={(e) => setRole(e.target.value)} className="border p-2 w-full" required>
           <option value="admin">Admin</option>
           <option value="nastavnik">Nastavnik</option>
-          <option value="razrednik">Razrednik</option>
-          <option value="zamjenik_razrednika">Zamjenik razrednika</option>
           <option value="učenik">Učenik</option>
           <option value="roditelj">Roditelj</option>
         </select>
