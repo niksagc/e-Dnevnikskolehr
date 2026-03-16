@@ -17,7 +17,7 @@ export default function NewClassSubjectPage() {
 
   useEffect(() => {
     const fetch = async () => {
-      const { data: c } = await supabase.from('classes').select('*');
+      const { data: c } = await supabase.from('class_departments').select('*');
       if (c) setClasses(c);
       const { data: s } = await supabase.from('subjects').select('*');
       if (s) setSubjects(s);
