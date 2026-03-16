@@ -34,6 +34,14 @@ export async function POST(request: Request) {
     if (profileError) {
       return NextResponse.json({ error: profileError.message }, { status: 400 });
     }
+
+    // 3. If role is 'učenik', create student record
+    if (role === 'učenik') {
+      await supabaseAdmin.from('students').insert({
+        id: authData.user.id,
+        full_name: fullName
+      });
+    }
   }
 
   return NextResponse.json({ success: true });
